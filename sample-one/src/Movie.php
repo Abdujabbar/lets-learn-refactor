@@ -14,11 +14,13 @@ class Movie
 
     private $title;
     private $priceCode;
+    private $price;
 
     /**
      * Movie constructor.
      * @param string $title
      * @param int $priceCode
+     * @throws Exception
      */
     public  function __construct(string $title, int $priceCode)
     {
@@ -26,9 +28,26 @@ class Movie
         $this->setPriceCode($priceCode);
     }
 
-
+    /**
+     * @param $priceCode
+     * @throws Exception
+     */
     public function setPriceCode($priceCode):void {
         $this->priceCode = $priceCode;
+        switch ($this->getPriceCode()) {
+            case self::REGULAR:
+                $this->price = new RegularPrice();
+                break;
+            case self::NEW_RELEASE:
+                $this->price = new NewReleasePrice();
+                break;
+            case self::CHILDRENS:
+                $this->price = new ChildrenPrice();
+                break;
+            default:
+                throw new Exception("Invalid price code");
+                break;
+        }
     }
 
     public function getPriceCode() : int {
@@ -42,5 +61,19 @@ class Movie
 
     public function setTitle($title) {
         $this->title = $title;
+    }
+
+
+    public function getCharge(int $daysRented) {
+        return $this->getCharge($daysRented);
+    }
+
+    public function getFrequentRenterPoints(int $daysRented) {
+        // бонус за аренду новинки на два дня
+        if (($this->getPriceCode() == Movie::NEW_RELEASE) &&
+            $daysRented > 1) {
+            return 2;
+        }
+        return 1;
     }
 }

@@ -23,7 +23,7 @@ class Rental
         return $this->movie;
     }
 
-    public function getDaysRanted() {
+    public function getDaysRented() {
         return $this->daysRented;
     }
 
